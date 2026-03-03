@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import * as S from './Dashboard.styled';
 import ClusterName from './ClusterName';
 import ClusterTableActionsCell from './ClusterTableActionsCell';
+import RecentlyViewedTopics from './RecentlyViewedTopics';
 
 const Dashboard: React.FC = () => {
   const { data } = useGetUserInfo();
@@ -99,7 +100,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <>
+    <> 
       <PageHeading text="Dashboard" />
       <Metrics.Wrapper>
         <Metrics.Section>
@@ -113,6 +114,7 @@ const Dashboard: React.FC = () => {
           </Metrics.Indicator>
         </Metrics.Section>
       </Metrics.Wrapper>
+      <RecentlyViewedTopics />
       <S.Toolbar>
         <div>
           <Switch

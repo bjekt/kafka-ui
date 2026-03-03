@@ -40,6 +40,7 @@ import { useProduceMessage } from 'lib/hooks/useProduceMessage';
 import ResourcePageHeading from 'components/common/ResourcePageHeading/ResourcePageHeading';
 import { TopicActionsProvider } from 'components/contexts/TopicActionsContext';
 import ErrorPage from 'components/ErrorPage/ErrorPage';
+import { useRecentlyViewedTopics } from 'lib/hooks/useRecentlyViewedTopics';
 
 import Messages from './Messages/Messages';
 import Overview from './Overview/Overview';
@@ -61,6 +62,8 @@ const Topic: React.FC = () => {
   const { messageData, setMessage, clearMessage } = useProduceMessage();
 
   const { clusterName, topicName } = useAppParams<RouteParamsClusterTopic>();
+
+  const { addRecentlyViewedTopic } = useRecentlyViewedTopics();
 
   const openSidebarWithMessage = (message: TopicMessage) => {
     setMessage(message);
@@ -84,6 +87,12 @@ const Topic: React.FC = () => {
 
   const { isReadOnly, isTopicDeletionAllowed } =
     React.useContext(ClusterContext);
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      addRecentlyViewedTopic(clusterName, topicName);
+    }
+  }, [isSuccess, clusterName, topicName]);
 
   const deleteTopicHandler = async () => {
     await deleteTopic.mutateAsync(topicName);
@@ -275,7 +284,7 @@ const Topic: React.FC = () => {
             )}
           </Navbar>
           <TopicActionsProvider openSidebarWithMessage={openSidebarWithMessage}>
-            <Suspense fallback={<PageLoader />}>
+            <Suspense fallback={<PageLoader />}> 
               <Routes>
                 <Route index element={<Overview />} />
                 <Route
